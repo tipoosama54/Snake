@@ -43,25 +43,27 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 20px;
         }
         .row {
             display: flex;
         }
         .control-btn {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
-            font-size: 20px;
+            width: 80px; /* تكبير الأزرار */
+            height: 80px;
+            margin: 8px;
+            font-size: 24px; /* تكبير الخط */
             font-weight: bold;
             border: none;
-            background-color: rgb(167, 180, 167);
-            color: black;
+            background-color: rgba(100, 200, 100,0.5);
+            color: white;
             border-radius: 50%;
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.2s, transform 0.1s;
+            user-select: none; /* يمنع تحديد النص */
+            touch-action: manipulation; /* يحسن التفاعل باللمس */
         }
         .control-btn:active {
-            background-color: rgba(100, 100, 100, 0.7);
+            background-color: rgb(50, 150, 50);
             transform: scale(1.1);
         }
     </style>
@@ -76,11 +78,11 @@
     <button id="startButton" onclick="startGame()">Start Game</button>
 
     <div class="controls">
-        <button class="control-btn" onclick="changeDirection('UP')">⬆️</button>
+        <button class="control-btn" data-dir="UP">⬆️</button>
         <div class="row">
-            <button class="control-btn" onclick="changeDirection('LEFT')">⬅️</button>
-            <button class="control-btn" onclick="changeDirection('DOWN')">⬇️</button>
-            <button class="control-btn" onclick="changeDirection('RIGHT')">➡️</button>
+            <button class="control-btn" data-dir="LEFT">⬅️</button>
+            <button class="control-btn" data-dir="DOWN">⬇️</button>
+            <button class="control-btn" data-dir="RIGHT">➡️</button>
         </div>
     </div>
 
@@ -109,6 +111,13 @@
             else if (dir === "LEFT" && direction !== "RIGHT") direction = "LEFT";
             else if (dir === "RIGHT" && direction !== "LEFT") direction = "RIGHT";
         }
+
+        document.querySelectorAll(".control-btn").forEach(btn => {
+            btn.addEventListener("touchstart", (event) => {
+                event.preventDefault(); // يمنع تأخير اللمس
+                changeDirection(btn.getAttribute("data-dir"));
+            });
+        });
 
         function startGame() {
             startButton.style.display = "none";

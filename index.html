@@ -132,6 +132,12 @@
             if (direction === "LEFT") newX -= box;
             if (direction === "RIGHT") newX += box;
 
+            // السماح للثعبان بالمرور من الحدود والظهور من الجهة الأخرى
+            if (newX < 0) newX = canvas.width - box;
+            if (newX >= canvas.width) newX = 0;
+            if (newY < 0) newY = canvas.height - box;
+            if (newY >= canvas.height) newY = 0;
+
             if (newX === food.x && newY === food.y) {
                 food = { x: Math.floor(Math.random() * 25) * box, y: Math.floor(Math.random() * 20) * box };
                 score++;
@@ -142,8 +148,8 @@
 
             let newHead = {x: newX, y: newY};
             
-            if (newX < 0 || newX >= canvas.width || newY < 0 || newY >= canvas.height ||
-                snake.some(segment => segment.x === newX && segment.y === newY)) {
+            // التحقق مما إذا كان الثعبان اصطدم بنفسه
+            if (snake.some(segment => segment.x === newX && segment.y === newY)) {
                 clearInterval(gameInterval);
                 alert("Game Over! Your score: " + score);
                 startButton.style.display = "block";

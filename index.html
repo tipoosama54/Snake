@@ -51,6 +51,10 @@
             justify-content: center;
             font-size: 18px;
             color: white;
+            position: relative;
+        }
+        #touchText {
+            position: absolute;
         }
     </style>
 </head>
@@ -63,7 +67,9 @@
     <canvas id="gameCanvas" width="500" height="400"></canvas>
     <button id="startButton" onclick="startGame()">Start Game</button>
     
-    <div id="touchArea">اسحب هنا للتحكم في الثعبان</div>
+    <div id="touchArea">
+        <span id="touchText">اسحب هنا للتحكم في الثعبان</span>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -71,6 +77,7 @@
         const scoreElement = document.getElementById("score");
         const startButton = document.getElementById("startButton");
         const touchArea = document.getElementById("touchArea");
+        const touchText = document.getElementById("touchText");
         const box = 20;
         let snake;
         let direction;
@@ -87,6 +94,7 @@
         });
 
         touchArea.addEventListener("touchstart", (event) => {
+            touchText.style.display = "none";  // إخفاء النص عند لمس المربع
             touchStartX = event.touches[0].clientX;
             touchStartY = event.touches[0].clientY;
         });
@@ -113,6 +121,7 @@
 
         function startGame() {
             startButton.style.display = "none";
+            touchText.style.display = "block";  // إعادة إظهار النص عند بدء لعبة جديدة
             snake = [{x: 10 * box, y: 10 * box}];
             direction = null;
             food = { x: Math.floor(Math.random() * 25) * box, y: Math.floor(Math.random() * 20) * box };
@@ -153,6 +162,7 @@
                 clearInterval(gameInterval);
                 alert("Game Over! Your score: " + score);
                 startButton.style.display = "block";
+                touchText.style.display = "block"; // إظهار النص عند الخسارة
                 return;
             }
 
